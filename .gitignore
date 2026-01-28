@@ -12,6 +12,8 @@
 
 # testing
 /coverage
+*.ps1
+commit-diff.txt
 
 # next.js
 /.next/
