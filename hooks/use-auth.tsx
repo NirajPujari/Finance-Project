@@ -107,14 +107,14 @@ export function useAuth() {
     }
   }, []);
 
-  const forgot = useCallback(async (email: string) => {
+  const forgot = useCallback(async (email: string, password:string) => {
     try {
       const res = await fetch("/api/forgot-password", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ email }),
+        body: JSON.stringify({ email, password }),
       });
 
       if (!res.ok) {

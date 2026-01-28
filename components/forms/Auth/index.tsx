@@ -5,7 +5,7 @@ import { ForgotPasswordForm, LoginForm, SignUpForm } from "./forms";
 import { useAuth } from "@Hooks/use-auth";
 
 const AuthForm = () => {
-  const [page, setPage] = useState<AuthMode>("forgot");
+  const [page, setPage] = useState<AuthMode>("login");
   const {login, signup, forgot} = useAuth();
 
   const setMode = (mode: AuthMode) => {

@@ -1,10 +1,18 @@
-import { AuthFormProps, LoginFormProps, SignUpFormProps, ForgotPasswordFormProps } from "@Types/authForm";
+import {
+  AuthFormProps,
+  LoginFormProps,
+  SignUpFormProps,
+  ForgotPasswordFormProps,
+} from "@Types/authForm";
 import { useState } from "react";
 import { FormHeader, InputField, PasswordField } from "./AuthFields";
 import { ArrowLeft, Mail, User } from "lucide-react";
 import { Input } from "@Components/ui/input";
 
-export const LoginForm = ({ setMode, logIn }: AuthFormProps & LoginFormProps) => {
+export const LoginForm = ({
+  setMode,
+  logIn,
+}: AuthFormProps & LoginFormProps) => {
   const [showPassword, setShowPassword] = useState(false);
   const [loginData, setLoginData] = useState({ email: "", password: "" });
 
@@ -71,7 +79,10 @@ export const LoginForm = ({ setMode, logIn }: AuthFormProps & LoginFormProps) =>
   );
 };
 
-export const SignUpForm = ({ setMode, signUp }: AuthFormProps & SignUpFormProps) => {
+export const SignUpForm = ({
+  setMode,
+  signUp,
+}: AuthFormProps & SignUpFormProps) => {
   const [showPassword, setShowPassword] = useState([false, false]);
   const [signUpData, setSignUpData] = useState({
     name: "",
@@ -178,9 +189,13 @@ export const SignUpForm = ({ setMode, signUp }: AuthFormProps & SignUpFormProps)
   );
 };
 
-export const ForgotPasswordForm = ({ setMode, forgot }: AuthFormProps & ForgotPasswordFormProps) => {
+export const ForgotPasswordForm = ({
+  setMode,
+  forgot,
+}: AuthFormProps & ForgotPasswordFormProps) => {
   const [showPassword, setShowPassword] = useState([false, false]);
   const [forgotPasswordData, setForgotPasswordData] = useState({
+    email: "",
     password: "",
     confirmPassword: "",
   });
@@ -209,6 +224,15 @@ export const ForgotPasswordForm = ({ setMode, forgot }: AuthFormProps & ForgotPa
         className="my-5 flex flex-col gap-4"
         onSubmit={handleForgotPassword}
       >
+        <InputField
+          label="Email Address"
+          icon={Mail}
+          id="email"
+          type="email"
+          placeholder="example@example.com"
+          value={forgotPasswordData.email}
+          onChange={(e) => setForgotPasswordDataField("email", e.target.value)}
+        />
         <PasswordField
           label="Password"
           value={forgotPasswordData.password}

@@ -36,5 +36,5 @@ export type SignUpFormProps = {
 };
 
 export type ForgotPasswordFormProps = {
-  forgot: (email: string) => Promise<{ success: boolean }>;
+  forgot: (email: string, password:string) => Promise<{ success: boolean }>;
 };
