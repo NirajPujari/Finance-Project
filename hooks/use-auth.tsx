@@ -1,4 +1,4 @@
-import { LogInUser, SignUpUser, User } from "@Types/user";
+import { ForgotPasswordUser, LogInUser, SignUpUser, User } from "@Types/user";
 import { useState, useCallback } from "react";
 
 export function useAuth() {
@@ -21,10 +21,10 @@ export function useAuth() {
       setUser({ token: data.token, name: data.name, email: data.email });
       localStorage.setItem("token", data.token);
       localStorage.setItem("token time", new Date().toString());
-      return { name: data.name, email: data.email };
+      return { success: true, name: data.name, email: data.email };
     } catch (error) {
       console.error("Login error:", error);
-      throw error;
+      return { success: false, error };
     }
   }, []);
 
@@ -49,7 +49,7 @@ export function useAuth() {
       return { success: data.success };
     } catch (error) {
       console.error("Signup error:", error);
-      throw error;
+      return { success: false, error };
     }
   }, []);
 
@@ -61,7 +61,7 @@ export function useAuth() {
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify(token),
+        body: JSON.stringify({token}),
       });
 
       if (!res.ok) {
@@ -77,7 +77,7 @@ export function useAuth() {
       return { success: data.success };
     } catch (error) {
       console.error("Logout error:", error);
-      throw error;
+      return { success: false, error };
     }
   }, []);
 
@@ -99,22 +99,22 @@ export function useAuth() {
         localStorage.setItem("token", data.token);
         localStorage.setItem("token time", new Date().toString());
         setUser({ token: data.token, name: data.name, email: data.email });
-        return;
+        return { success: true };
       } catch (error) {
         console.error("Auto login error:", error);
-        return;
+        return { success: false };
       }
     }
   }, []);
 
-  const forgot = useCallback(async (email: string, password:string) => {
+  const forgot = useCallback(async (userData: ForgotPasswordUser) => {
     try {
-      const res = await fetch("/api/forgot-password", {
+      const res = await fetch("/api/forgot", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ email, password }),
+        body: JSON.stringify(userData),
       });
 
       if (!res.ok) {
@@ -128,7 +128,7 @@ export function useAuth() {
       return { success: data.success };
     } catch (error) {
       console.error("Forgot password error:", error);
-      throw error;
+      return { success: false, error };
     }
   }, []);
 

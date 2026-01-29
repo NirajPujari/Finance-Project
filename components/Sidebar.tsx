@@ -18,6 +18,7 @@ import {
   SidebarMenuItem,
 } from "@Components/ui/sidebar";
 import Link from "next/link";
+import LogOutButton from "./LogOutButton";
 
 const items = [
   { icon: LayoutDashboard, title: "Dashboard", url: "/" },
@@ -60,18 +61,21 @@ export default function Sidebar() {
         </SidebarGroup>
       </SidebarContent>
       <SidebarFooter className="bg-black text-white text-sm p-4 border-t border-gray-500">
-        <Link href="/settings" className="font-bold flex gap-2">
-          <button className="w-full flex gap-3 hover:bg-gray-800 transition-all duration-300 rounded-lg p-2 justify-start">
+        <div className="font-bold flex gap-2">
+          <Link
+            href="/settings"
+            className="w-full flex gap-3 hover:bg-gray-800 transition-all duration-300 rounded-lg p-2 justify-start"
+          >
             <Settings className="mt-0.5 h-4 w-4" />
             <span>Settings</span>
-          </button>
-        </Link>
-        <Link href="/logout" className="font-bold flex gap-2">
-          <button className="w-full flex gap-3 hover:bg-red-800 transition-all duration-300 rounded-lg p-2 justify-start">
-            <LogOut className="mt-0.5WASEDWQ Q h-4 w-4" />
+          </Link>
+        </div>
+        <div className="font-bold flex gap-2">
+          <LogOutButton className="w-full flex gap-3 hover:bg-red-800 transition-all duration-300 rounded-lg p-2 justify-start">
+            <LogOut className="mt-0.5 h-4 w-4" />
             <span>Logout</span>
-          </button>
-        </Link>
+          </LogOutButton>
+        </div>
       </SidebarFooter>
     </ShadCnSidebar>
   );

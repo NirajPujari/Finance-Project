@@ -5,11 +5,11 @@ import { NextResponse } from "next/server";
 
 export async function POST(req: Request) {
   try {
-    const { name, age, email, password } = await req.json();
+    const { name, email, password } = await req.json();
 
-    if (!name || !age || !email || !password) {
+    if (!name  || !email || !password) {
       return NextResponse.json(
-        { success: false, message: "Name, Age, Email and password are required" },
+        { success: false, message: "Name, Email and password are required" },
         { status: 400 }
       );
     }
@@ -18,7 +18,7 @@ export async function POST(req: Request) {
 
     const user = await db.collection("users").findOne({ email });
 
-    if (!user) {
+    if (user) {
       return NextResponse.json(
         { success: false, message: "Email already exists" },
         { status: 401 }
@@ -27,7 +27,6 @@ export async function POST(req: Request) {
 
     await db.collection("users").insertOne({
       name,
-      age,
       email,
       passwordHash: await createHash(password),
       password,

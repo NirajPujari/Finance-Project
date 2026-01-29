@@ -1,16 +1,25 @@
 "use client";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { AuthMode } from "@Types/authForm";
 import { ForgotPasswordForm, LoginForm, SignUpForm } from "./forms";
 import { useAuth } from "@Hooks/use-auth";
+import { useRouter } from "next/navigation";
 
 const AuthForm = () => {
   const [page, setPage] = useState<AuthMode>("login");
   const {login, signup, forgot} = useAuth();
+  const router = useRouter()
 
   const setMode = (mode: AuthMode) => {
     setPage(mode);
   };
+
+  useEffect(()=>{
+    const token = localStorage.getItem("token");
+    if (token){
+      router.replace("/")
+    }
+  },[router])
 
   return (
     <div className="w-full max-w-md">

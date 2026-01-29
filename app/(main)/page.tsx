@@ -9,24 +9,24 @@ export default function Home() {
   const router = useRouter();
 
   useEffect(() => {
-    // const token = localStorage.getItem("token");
-    // const tokenTime = localStorage.getItem("token time");
+    const token = localStorage.getItem("token");
+    const tokenTime = localStorage.getItem("token time");
 
-    // if (user) return;
+    if (user) return;
 
-    // if (!token || !tokenTime) {
-    //   router.push("/login");
-    //   return;
-    // }
+    if (!token || !tokenTime) {
+      router.push("/login");
+      return;
+    }
 
-    // const savedTime = new Date(tokenTime).getTime();
-    // const threeDaysAgo = Date.now() - 3 * 24 * 60 * 60 * 1000;
+    const savedTime = new Date(tokenTime).getTime();
+    const threeDaysAgo = Date.now() - 3 * 24 * 60 * 60 * 1000;
 
-    // if (savedTime > threeDaysAgo) {
-    //   autoLog();
-    // } else {
-    //   router.push("/login");
-    // }
+    if (savedTime > threeDaysAgo) {
+      autoLog();
+    } else {
+      router.push("/login");
+    }
   }, [user, autoLog, router]);
 
   return (

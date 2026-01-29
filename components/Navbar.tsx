@@ -8,6 +8,7 @@ import {
 } from "@Components/ui/dropdown-menu";
 import { User } from "lucide-react";
 import Link from "next/link";
+import LogOutButton from "./LogOutButton";
 
 export default function Navbar() {
   return (
@@ -30,7 +31,7 @@ export default function Navbar() {
             </DropdownMenuGroup>
             <DropdownMenuSeparator className="border-t border-gray-500"/>
             <DropdownMenuItem className="hover:bg-red-700 transition-colors duration-300">
-              <Link href="/logout">Log out</Link>
+              <LogOutButton>Log out</LogOutButton>
             </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>

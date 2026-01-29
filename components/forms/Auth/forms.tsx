@@ -8,6 +8,13 @@ import { useState } from "react";
 import { FormHeader, InputField, PasswordField } from "./AuthFields";
 import { ArrowLeft, Mail, User } from "lucide-react";
 import { Input } from "@Components/ui/input";
+import { errorToast, successToast } from "@Lib/toast";
+import { useRouter } from "next/navigation";
+
+const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+const passwordRegex =
+  /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&#^()[\]{}\-_=+|\\:;"'<>,./~`]).{8,}$/;
 
 export const LoginForm = ({
   setMode,
@@ -15,14 +22,50 @@ export const LoginForm = ({
 }: AuthFormProps & LoginFormProps) => {
   const [showPassword, setShowPassword] = useState(false);
   const [loginData, setLoginData] = useState({ email: "", password: "" });
+  const router = useRouter();
 
   const setLoginDataField = (field: string, value: string) => {
     setLoginData((prev) => ({ ...prev, [field]: value }));
   };
 
-  const handleLogin = (e: React.FormEvent) => {
+  const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
-    // Handle login logic here
+    if (!emailRegex.test(loginData.email)) {
+      errorToast({
+        message: "Enter a correct email address.",
+        position: "top-right",
+      });
+      return;
+    }
+    if (!passwordRegex.test(loginData.password)) {
+      errorToast({
+        message: "Invalid Password",
+        description:
+          "Password should contain atleast 1 Capital, 1 Small, 1 Special Character and 1 Digit.",
+        position: "top-right",
+      });
+      return;
+    }
+    const data = await logIn({
+      email: loginData.email,
+      password: loginData.password,
+    });
+    if (data.success) {
+      successToast({
+        message:
+          "Welcome back " +
+          data.name?.slice(0, 1).toLocaleUpperCase() +
+          data.name?.slice(1),
+      });
+      router.replace("/");
+    } else {
+      errorToast({
+        message: "There is a error in login.",
+        description: "Try Again Later.",
+        position: "top-right",
+      });
+      router.refresh();
+    }
   };
 
   return (
@@ -59,7 +102,7 @@ export const LoginForm = ({
         </div>
         <div className="mx-2">
           <button
-            className="w-full text-sm bg-black text-white py-2 rounded-lg hover:bg-black/70 transition-colors font-bold duration-300"
+            className="w-full text-sm bg-black text-white py-2 rounded-lg hover:bg-black/70 transition-colors font-bold duration-300 cursor-pointer"
             type="submit"
           >
             Sign In
@@ -93,6 +136,9 @@ export const SignUpForm = ({
   });
 
   const setSignUpDataField = (field: string, value: string) => {
+    if (field == "name") {
+      value = value.replace(/\b\w/g, (char) => char.toUpperCase());
+    }
     setSignUpData((prev) => ({ ...prev, [field]: value }));
   };
 
@@ -100,9 +146,62 @@ export const SignUpForm = ({
     setSignUpData((prev) => ({ ...prev, checkTerms: !signUpData.checkTerms }));
   };
 
-  const handleSignUp = (e: React.FormEvent) => {
+  const handleSignUp = async (e: React.FormEvent) => {
     e.preventDefault();
-    // Handle sign up logic here
+    if (signUpData.name == "") {
+      errorToast({
+        message: "Enter a Name.",
+        position: "top-right",
+      });
+      return;
+    }
+    if (!emailRegex.test(signUpData.email)) {
+      errorToast({
+        message: "Enter a correct email address.",
+        position: "top-right",
+      });
+      return;
+    }
+    if (!passwordRegex.test(signUpData.password)) {
+      errorToast({
+        message: "Invalid Password",
+        description:
+          "Password should contain atleast 1 Capital, 1 Small, 1 Special Character and 1 Digit.",
+        position: "top-right",
+      });
+      return;
+    }
+    if (signUpData.password !== signUpData.confirmPassword) {
+      errorToast({
+        message: "Password are not same.",
+        position: "top-right",
+      });
+      return;
+    }
+    if (!signUpData.checkTerms) {
+      errorToast({
+        message: "Please check the terms and conditions.",
+        position: "top-right",
+      });
+      return;
+    }
+    const data = await signUp({
+      name: signUpData.name,
+      email: signUpData.email,
+      password: signUpData.password,
+    });
+    if (data.success) {
+      successToast({
+        message: "Thank you for joining us " + signUpData.name,
+      });
+      window.location.reload();
+    } else {
+      errorToast({
+        message: "There is a error in signup. " + data.error,
+        description: "Try Again Later.",
+        position: "top-right",
+      });
+    }
   };
   return (
     <>
@@ -204,9 +303,47 @@ export const ForgotPasswordForm = ({
     setForgotPasswordData((prev) => ({ ...prev, [field]: value }));
   };
 
-  const handleForgotPassword = (e: React.FormEvent) => {
+  const handleForgotPassword = async (e: React.FormEvent) => {
     e.preventDefault();
-    // Handle sign up logic here
+    if (!emailRegex.test(forgotPasswordData.email)) {
+      errorToast({
+        message: "Enter a correct email address.",
+        position: "top-right",
+      });
+      return;
+    }
+    if (!passwordRegex.test(forgotPasswordData.password)) {
+      errorToast({
+        message: "Invalid Password",
+        description:
+          "Password should contain atleast 1 Capital, 1 Small, 1 Special Character and 1 Digit.",
+        position: "top-right",
+      });
+      return;
+    }
+    if (forgotPasswordData.password !== forgotPasswordData.confirmPassword) {
+      errorToast({
+        message: "Password are not same.",
+        position: "top-right",
+      });
+      return;
+    }
+    const data = await forgot({
+      email: forgotPasswordData.email,
+      password: forgotPasswordData.password,
+    });
+    if (data.success) {
+      successToast({
+        message: "Your Password is been changed.",
+      });
+      window.location.reload();
+    } else {
+      errorToast({
+        message: "There is a error in changing your password. " + data.error,
+        description: "Try Again Later.",
+        position: "top-right",
+      });
+    }
   };
   return (
     <>

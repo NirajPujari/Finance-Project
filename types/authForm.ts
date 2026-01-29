@@ -1,6 +1,6 @@
-import { Input } from "@/components/ui/input";
+import { Input } from "@Components/ui/input";
 import { LucideIcon } from "lucide-react";
-import { LogInUser, SignUpUser } from "./user";
+import { ForgotPasswordUser, LogInUser, SignUpUser } from "./user";
 
 export type AuthFormProps = {
   setMode: (mode: "login" | "register" | "forgot") => void;
@@ -28,13 +28,44 @@ export type PasswordFieldProps = {
 };
 
 export type LoginFormProps = {
-  logIn: (userData: LogInUser) => Promise<{ name: string; email: string }>;
+  logIn: (userData: LogInUser) => Promise<
+    | {
+        success: boolean;
+        name: string;
+        email: string;
+        error?: undefined;
+      }
+    | {
+        success: boolean;
+        error: unknown;
+        name?: undefined;
+        email?: undefined;
+      }
+  >;
 };
 
 export type SignUpFormProps = {
-  signUp: (userData: SignUpUser) => Promise<{ success: boolean }>;
+  signUp: (userData: SignUpUser) => Promise<
+    | {
+        success: boolean;
+        error?: undefined;
+      }
+    | {
+        success: boolean;
+        error: unknown;
+      }
+  >;
 };
 
 export type ForgotPasswordFormProps = {
-  forgot: (email: string, password:string) => Promise<{ success: boolean }>;
+  forgot: (userData: ForgotPasswordUser) => Promise<
+    | {
+        success: boolean;
+        error?: undefined;
+      }
+    | {
+        success: boolean;
+        error: unknown;
+      }
+  >;
 };
