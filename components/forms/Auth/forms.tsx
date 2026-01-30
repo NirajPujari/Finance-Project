@@ -3,7 +3,7 @@ import {
   LoginFormProps,
   SignUpFormProps,
   ForgotPasswordFormProps,
-} from "@Types/authForm";
+} from "@Types/auth";
 import { useState } from "react";
 import { FormHeader, InputField, PasswordField } from "./AuthFields";
 import { ArrowLeft, Mail, User } from "lucide-react";
@@ -18,7 +18,7 @@ const passwordRegex =
 
 export const LoginForm = ({
   setMode,
-  logIn,
+  login,
 }: AuthFormProps & LoginFormProps) => {
   const [showPassword, setShowPassword] = useState(false);
   const [loginData, setLoginData] = useState({ email: "", password: "" });
@@ -46,16 +46,13 @@ export const LoginForm = ({
       });
       return;
     }
-    const data = await logIn({
+    const data = await login({
       email: loginData.email,
       password: loginData.password,
     });
     if (data.success) {
       successToast({
-        message:
-          "Welcome back " +
-          data.name?.slice(0, 1).toLocaleUpperCase() +
-          data.name?.slice(1),
+        message: "Welcome back",
       });
       router.replace("/");
     } else {
@@ -124,7 +121,7 @@ export const LoginForm = ({
 
 export const SignUpForm = ({
   setMode,
-  signUp,
+  signup,
 }: AuthFormProps & SignUpFormProps) => {
   const [showPassword, setShowPassword] = useState([false, false]);
   const [signUpData, setSignUpData] = useState({
@@ -185,7 +182,7 @@ export const SignUpForm = ({
       });
       return;
     }
-    const data = await signUp({
+    const data = await signup({
       name: signUpData.name,
       email: signUpData.email,
       password: signUpData.password,

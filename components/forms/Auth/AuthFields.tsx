@@ -3,7 +3,7 @@ import {
   FormHeaderProps,
   InputFieldProps,
   PasswordFieldProps,
-} from "@/types/authForm";
+} from "@Types/auth";
 import { Eye, EyeOff, Lock } from "lucide-react";
 
 export const FormHeader = ({ title, description }: FormHeaderProps) => (

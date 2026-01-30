@@ -1,6 +1,6 @@
 "use client";
-import { errorToast, successToast } from "@/lib/toast";
-import { useAuth } from "@Hooks/use-auth";
+import { errorToast, successToast } from "@Lib/toast";
+import { useAuth } from "@Context/Auth";
 import { LogOutButtonProps } from "@Types/button";
 import { useRouter } from "next/navigation";
 

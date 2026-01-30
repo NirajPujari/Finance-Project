@@ -1,27 +1,44 @@
-import { ForgotPasswordUser, LogInUser, SignUpUser, User } from "@Types/user";
-import { useState, useCallback } from "react";
+"use client";
 
-export function useAuth() {
+import { AuthContextType } from "@Types/auth";
+import {
+  ForgotPasswordUser,
+  LogInUser,
+  SignUpUser,
+  User,
+} from "@Types/user";
+import {
+  createContext,
+  useContext,
+  useState,
+  useCallback,
+  ReactNode,
+} from "react";
+
+const AuthContext = createContext<AuthContextType | null>(null);
+
+export function AuthProvider({ children }: { children: ReactNode }) {
   const [user, setUser] = useState<User | null>(null);
 
   const login = useCallback(async (userData: LogInUser) => {
     try {
       const res = await fetch("/api/login", {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify(userData),
       });
+
       if (!res.ok) {
         const errorBody = await res.json().catch(() => null);
         throw new Error(errorBody?.message || "Login failed");
       }
+
       const data = await res.json();
       setUser({ token: data.token, name: data.name, email: data.email });
       localStorage.setItem("token", data.token);
-      localStorage.setItem("token time", new Date().toString());
-      return { success: true, name: data.name, email: data.email };
+      localStorage.setItem("token_time", new Date().toString());
+
+      return { success: true };
     } catch (error) {
       console.error("Login error:", error);
       return { success: false, error };
@@ -32,9 +49,7 @@ export function useAuth() {
     try {
       const res = await fetch("/api/signup", {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify(userData),
       });
 
@@ -44,8 +59,6 @@ export function useAuth() {
       }
 
       const data = await res.json();
-      console.log("Signup response:", data);
-
       return { success: data.success };
     } catch (error) {
       console.error("Signup error:", error);
@@ -56,25 +69,18 @@ export function useAuth() {
   const logout = useCallback(async () => {
     try {
       const token = localStorage.getItem("token");
-      const res = await fetch("/api/logout", {
+
+      await fetch("/api/logout", {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({token}),
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ token }),
       });
 
-      if (!res.ok) {
-        const errorBody = await res.json().catch(() => null);
-        throw new Error(errorBody?.message || "Signup failed");
-      }
-
-      const data = await res.json();
-      console.log("Logout response:", data);
       setUser(null);
       localStorage.removeItem("token");
+      localStorage.removeItem("token_time");
 
-      return { success: data.success };
+      return { success: true };
     } catch (error) {
       console.error("Logout error:", error);
       return { success: false, error };
@@ -83,27 +89,26 @@ export function useAuth() {
 
   const autoLog = useCallback(async () => {
     const token = localStorage.getItem("token");
-    if (token) {
-      try {
-        const res = await fetch("/api/auto", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(token),
-        });
-        if (!res.ok) {
-          return;
-        }
-        const data = await res.json();
-        localStorage.setItem("token", data.token);
-        localStorage.setItem("token time", new Date().toString());
-        setUser({ token: data.token, name: data.name, email: data.email });
-        return { success: true };
-      } catch (error) {
-        console.error("Auto login error:", error);
-        return { success: false };
-      }
+    if (!token) return;
+
+    try {
+      const res = await fetch("/api/auto", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ token }),
+      });
+
+      if (!res.ok) return;
+
+      const data = await res.json();
+      setUser({ token: data.token, name: data.name, email: data.email });
+      localStorage.setItem("token", data.token);
+      localStorage.setItem("token_time", new Date().toString());
+
+      return { success: true };
+    } catch (error) {
+      console.error("Auto login error:", error);
+      return { success: false };
     }
   }, []);
 
@@ -111,9 +116,7 @@ export function useAuth() {
     try {
       const res = await fetch("/api/forgot", {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify(userData),
       });
 
@@ -123,8 +126,6 @@ export function useAuth() {
       }
 
       const data = await res.json();
-      console.log("Forgot password response:", data);
-
       return { success: data.success };
     } catch (error) {
       console.error("Forgot password error:", error);
@@ -132,12 +133,19 @@ export function useAuth() {
     }
   }, []);
 
-  return {
-    login,
-    logout,
-    signup,
-    autoLog,
-    forgot,
-    user,
-  };
+  return (
+    <AuthContext.Provider
+      value={{ user, login, signup, logout, autoLog, forgot }}
+    >
+      {children}
+    </AuthContext.Provider>
+  );
+}
+
+export function useAuth() {
+  const ctx = useContext(AuthContext);
+  if (!ctx) {
+    throw new Error("useAuth must be used inside AuthProvider");
+  }
+  return ctx;
 }

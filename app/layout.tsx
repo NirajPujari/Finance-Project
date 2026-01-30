@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { manrope, spaceGrotesk } from "./fonts";
 import "./globals.css";
-import { Toaster } from "@/components/ui/sonner";
+import { Toaster } from "@Components/ui/sonner";
 
 export const metadata: Metadata = {
   title: "Project on Finance",
