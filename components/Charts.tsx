@@ -9,7 +9,6 @@ import {
   Legend,
   PieChart,
   Pie,
-  Cell,
   PieSectorShapeProps,
   Sector,
 } from "recharts";
@@ -55,12 +54,12 @@ const Charts = () => {
     },
   ]);
   const [pieChart, setPieChart] = useState([
-    { name: "Housing", value: 900,color:"#89a" },
-    { name: "Food", value: 450, color:"#3d0" },
-    { name: "Transport", value: 300, color:"#4a5" },
-    { name: "Entertainment", value: 250,color:"#570" },
-    { name: "Utilities", value: 200, color:"#64b" },
-    { name: "Other", value: 350, colo:"#7c6" },
+    { name: "Housing", value: 900, color: "#111827" },
+    { name: "Food", value: 450, color: "#1f2937" },
+    { name: "Transport", value: 300, color: "#374151" },
+    { name: "Entertainment", value: 250, color: "#4b5563" },
+    { name: "Utilities", value: 200, color: "#6b7280" },
+    { name: "Other", value: 350, color: "#9ca3af" },
   ]);
 
   return (
@@ -86,27 +85,12 @@ const Charts = () => {
           <YAxis width="auto" tickLine={false} axisLine={false} />
           <Tooltip />
           <Legend />
-          <Bar
-            dataKey="Essential"
-            fill="#64748b"
-            activeBar={{ fill: "#475569" }}
-            radius={[10, 10, 0, 0]}
-          />
-          <Bar
-            dataKey="Investment"
-            fill="#22c55e"
-            activeBar={{ fill: "#16a34a" }}
-            radius={[10, 10, 0, 0]}
-          />
-          <Bar
-            dataKey="Enjoyment"
-            fill="#f59e0b"
-            activeBar={{ fill: "#d97706" }}
-            radius={[10, 10, 0, 0]}
-          />
+          <Bar dataKey="Essential" fill="#111827" radius={[10, 10, 0, 0]} />
+          <Bar dataKey="Investment" fill="#4b5563" radius={[10, 10, 0, 0]} />
+          <Bar dataKey="Enjoyment" fill="#6b7280" radius={[10, 10, 0, 0]} />
         </BarChart>
       </div>
-      <div className="shadow-lg rounded-xl p-6 w-1/2 border border-black/10 flex flex-col justify-between">
+      <div className="shadow-lg border border-black/10 rounded-xl p-6 w-1/2 flex flex-col justify-between">
         <div className="flex flex-col mb-4">
           <h2 className="text-lg font-bold">Cash Flow</h2>
           <p className="text-sm font-medium text-gray-500">
@@ -124,13 +108,18 @@ const Charts = () => {
           <Pie
             data={pieChart}
             dataKey="value"
-            label={({ name, percent }) => percent?`${name} ${(percent * 100).toFixed(0)}%`:`${name}`}
+            label={({ name, percent }) =>
+              percent ? `${name} ${(percent * 100).toFixed(0)}%` : `${name}`
+            }
             labelLine={false}
             isAnimationActive
-            fill="#32a89a"
+            fill="#111827"
             shape={(props: PieSectorShapeProps) => {
               return (
-                <Sector {...props} fill={pieChart[props.index % pieChart.length].color} />
+                <Sector
+                  {...props}
+                  fill={pieChart[props.index % pieChart.length].color}
+                />
               );
             }}
           />
