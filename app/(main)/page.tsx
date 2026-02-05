@@ -9,9 +9,9 @@ export default function Home() {
     <div className="min-h-screen w-full p-6 space-y-6">
       <SummaryCards />
       <Charts />
-      <section className="flex gap-6 flex-col md:flex-col">
-        <RecentTransactions className="w-full"/>
-        <div className="flex gap-6 flex-col">
+      <section className="flex gap-6 flex-col md:flex-row">
+        <RecentTransactions className="w-full md:w-2/3"/>
+        <div className="flex gap-6 flex-col w-full md:w-1/3">
           <BudgetStatus />
           <SavingsGoals />
         </div>

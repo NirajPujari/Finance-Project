@@ -26,11 +26,11 @@ export default function page() {
     },
   ];
   return (
-    <div className="min-h-screen bg-white flex text-black justify-center items-center">
-      <div className="flex w-full max-w-6xl rounded-lg justify-center items-center">
-        {/* Left side: Branding (hidden on mobile) */}
-        <section className="w-full flex flex-col gap-6">
-          <div className="hidden md:flex w-full flex-col gap-12">
+    <div className="min-h-screen bg-white flex text-black justify-center items-center px-4 py-8">
+      <div className="flex w-full max-w-6xl rounded-2xl justify-between items-stretch flex-col md:flex-row gap-10">
+        {/* Left side: Branding (hidden main content on mobile) */}
+        <section className="w-full hidden md:flex flex-col gap-6 md:pr-8">
+          <div className="flex w-full flex-col gap-12">
             <header className="flex flex-col gap-4 justify-start items-start">
               <div className="flex justify-center items-center gap-4 font-bold">
                 <div className="py-1 px-3 text-xl bg-black text-white rounded-lg">
@@ -59,7 +59,7 @@ export default function page() {
             </div>
             <div className="border-b border-b-gray-800/50"></div>
           </div>
-          <footer className="flex flex-col gap-3 justify-start items-start">
+          <footer className="flex flex-col gap-3 justify-start items-start mt-8 md:mt-0">
             <p className="text-gray-500 text-sm">Trusted by millions worldwide</p>
             <div className="flex gap-2">
               <p className="bg-gray-200 py-2 px-3 rounded-xl text-xs text-black font-bold">⭐ 4.9</p>
@@ -70,7 +70,7 @@ export default function page() {
         </section>
 
         {/* Right side: Auth form */}
-        <section className="w-full flex justify-center items-center">
+        <section className="w-full flex justify-center items-center md:max-w-md mx-auto">
           <AuthForm />
         </section>
       </div>

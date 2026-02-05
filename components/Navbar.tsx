@@ -26,6 +26,7 @@ export default function Navbar() {
     if (user) return;
 
     if (!token || !tokenTime) {
+      
       router.push("/login");
       return;
     }

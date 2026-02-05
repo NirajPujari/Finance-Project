@@ -1,7 +1,6 @@
 import { SidebarProvider, SidebarTrigger } from "@Components/ui/sidebar";
 import Sidebar from "@Components/Sidebar";
 import Navbar from "@Components/Navbar";
-import { AuthProvider } from "@Context/Auth";
 
 export default function RootLayout({
   children,
@@ -9,7 +8,6 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <AuthProvider>
       <SidebarProvider>
         <Sidebar />
         <SidebarTrigger className="md:hidden absolute top-3 left-3" />
@@ -18,6 +16,5 @@ export default function RootLayout({
           {children}
         </main>
       </SidebarProvider>
-    </AuthProvider>
   );
 }
